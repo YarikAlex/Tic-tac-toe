@@ -45,10 +45,10 @@ int check_line(Field& field, int x, int y, int vx, int vy, int len, PLAYER c)
 
 void select_field(Field& field)
 {
-	cout << "Выбери размер поля для начала:" << endl;
-	cout << "Введи ширину поля: ";
+	cout << "Choose a field size first:" << endl;
+	cout << "Choose the field width: ";
 	cin >> field.szX;
-	cout << "Введи высоту поля: ";
+	cout << "Choose field height: ";
 	cin >> field.szY;
 	if (field.szX == field.szY || field.szX < field.szY) field.towin = field.szX;
 	else if (field.szX > field.szY) field.towin = field.szY;
@@ -87,7 +87,7 @@ void human_move(Field &field)
 	int x, y;
 	do
 	{
-		cout << "Укажите куда поставить Х. Столбец и строку: ";
+		cout << "Choose where to put X. Column and row: ";
 		cin >> x >> y;
 		x--;
 		y--;
@@ -182,7 +182,7 @@ int check_game(Field& field, PLAYER p, const char* win_string)
 	}
 	if (check_draw(field, p))
 	{
-		cout << "Ничья" << endl;
+		cout << "Draw" << endl;
 		return 1;
 	}
 	return 0;
@@ -200,14 +200,14 @@ void tictactoe()
 		{
 			human_move(field);
 			print(field);
-			if (check_game(field, HUMAN, "Ты победил! ")) break;
+			if (check_game(field, HUMAN, "You win!")) break;
 			ai_move(field);
 			print(field);
-			if (check_game(field, AI, "Я победил! ")) break;
+			if (check_game(field, AI, "I win!")) break;
 		}
 		cout << endl;
 		char answer;
-		cout << "Сыграем снова? y/n ";
+		cout << "Play again? y/n ";
 		cin >> answer;
 		if (answer != 'y') break;
 	}
@@ -215,7 +215,6 @@ void tictactoe()
 
 int main()
 {
-	setlocale(LC_ALL, "ru");
 	srand(time_t(0));
 	tictactoe();
 }
