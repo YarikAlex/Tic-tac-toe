@@ -82,6 +82,19 @@ void print(Field& field)
 	}
 }
 
+void human_move(Field &field)
+{
+	int x, y;
+	do
+	{
+		cout << "Укажите куда поставить Х. Столбец и строку: ";
+		cin >> x >> y;
+		x--;
+		y--;
+	} while (!isvalid(field, x, y) || !isempty(field, x, y));
+	setval(field.map, y, x, HUMAN);
+}
+
 int check_win(Field& field, PLAYER player)
 {
 	for (int y = 0; y < field.szY; ++y)
@@ -95,19 +108,6 @@ int check_win(Field& field, PLAYER player)
 		}
 	}
 	return 0;
-}
-
-void human_move(Field &field)
-{
-	int x, y;
-	do
-	{
-		cout << "Укажите куда поставить Х. Столбец и строку: ";
-		cin >> x >> y;
-		x--;
-		y--;
-	} while (!isvalid(field, x, y) || !isempty(field, x, y));
-	setval(field.map, y, x, HUMAN);
 }
 
 int ai_win_check(Field& field)
