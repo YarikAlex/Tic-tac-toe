@@ -82,6 +82,21 @@ void print(Field& field)
 	}
 }
 
+int check_win(Field& field, PLAYER player)
+{
+	for (int y = 0; y < field.szY; ++y)
+	{
+		for (int x = 0; x < field.szX; ++x)
+		{
+			if (check_line(field, y, x, 1, 0, field.towin, player)) return 1; //по горизонтали
+			if (check_line(field, y, x, 0, 1, field.towin, player)) return 1; // по вертикали
+			if (check_line(field, y, x, 1, 1, field.towin, player)) return 1; // по диагонали 1
+			if (check_line(field, y, x, 1, -1, field.towin, player)) return 1; // по диагонали 2
+		}
+	}
+	return 0;
+}
+
 void human_move(Field &field)
 {
 	int x, y;
@@ -95,8 +110,48 @@ void human_move(Field &field)
 	setval(field.map, y, x, HUMAN);
 }
 
+int ai_win_check(Field& field)
+{
+	for (int y = 0; y < field.szY; ++y)
+	{
+		for (int x = 0; x < field.szX; ++x)
+		{
+			if (isempty(field, x, y))
+			{
+				setval(field.map, y, x, AI);
+				if (check_win(field, AI)) return 1;
+				setval(field.map, y, x, EMPTY);
+			}
+		}
+	}
+	return 0;
+}
+
+int human_win_check(Field& field)
+{
+	for (int y = 0; y < field.szY; ++y)
+	{
+		for (int x = 0; x < field.szX; ++x)
+		{
+			if (isempty(field, x, y))
+			{
+				setval(field.map, y, x, HUMAN);
+				if (check_win(field, AI))
+				{
+					setval(field.map, y, x, AI);
+					return 1;
+				}
+				setval(field.map, y, x, EMPTY);
+			}
+		}
+	}
+	return 0;
+}
+
 void ai_move(Field& field)
 {
+	if (ai_win_check(field)) return;
+	if (human_win_check(field)) return;
 	int x, y;
 	do
 	{
@@ -104,21 +159,6 @@ void ai_move(Field& field)
 		y = rand() % field.szY;
 	} while (!isempty(field, x, y));
 	setval(field.map, y, x, AI);
-}
-
-int check_win(Field& field, PLAYER player)
-{
-	for (int y = 0; y < field.szX; ++y)
-	{
-		for (int x = 0; x < field.szY; ++x)
-		{
-			if (check_line(field, y, x, 1, 0, field.towin, player)) return 1; //по горизонтали
-			if (check_line(field, y, x, 0, 1, field.towin, player)) return 1; // по вертикали
-			if (check_line(field, y, x, 1, 1, field.towin, player)) return 1; // по диагонали 1
-			if (check_line(field, y, x, 1, -1, field.towin, player)) return 1; // по диагонали 2
-		}
-	}
-	return 0;
 }
 
 int check_draw(Field& field, PLAYER player)
